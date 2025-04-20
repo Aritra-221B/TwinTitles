@@ -87,4 +87,4 @@ Twin_titles/
 - NLP Model: Sentence-BERT / Sentence Transformers
 - Frontend Framework: Bootstrap 5
 - Visualization: Chart.js and matplotlib
-- PDF Generation: ReportLab 
+- PDF Generation: ReportLab
