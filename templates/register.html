@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - TwinTitles</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8860D0;
+            --secondary-color: #5AB9EA;
+            --accent-color: #84CEEB;
+            --light-color: #C1C8E4;
+            --dark-color: #4A4E69;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(147, 112, 219, 0.6) 0%, rgba(100, 149, 237, 0.6) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .register-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 550px;
+            position: relative;
+        }
+        
+        .register-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .register-logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .register-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .register-body {
+            padding: 35px 30px;
+        }
+        
+        .form-floating {
+            margin-bottom: 20px;
+        }
+        
+        .form-floating label {
+            color: #666;
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 12px 15px;
+            height: 55px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(136, 96, 208, 0.25);
+        }
+        
+        .input-group-text {
+            background-color: transparent;
+            border-left: none;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .btn-register {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            border-radius: 50px;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-register:hover {
+            background: linear-gradient(135deg, #7A54C0 0%, #4AA8D9 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .register-footer {
+            text-align: center;
+            padding: 0 30px 35px;
+            color: #666;
+        }
+        
+        .login-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .login-link:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+        
+        .terms-checkbox {
+            margin-bottom: 20px;
+        }
+        
+        .terms-checkbox .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .back-to-home {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-home:hover {
+            transform: translateX(-3px);
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .password-strength {
+            font-size: 0.85rem;
+            margin-top: 5px;
+            color: #666;
+        }
+        
+        .progress {
+            height: 6px;
+            margin-top: 8px;
+            border-radius: 3px;
+            background-color: #f0f0f0;
+        }
+        
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-card">
+        <div class="register-header">
+            <a href="{{ url_for('landing') }}" class="back-to-home">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="register-logo">
+                <i class="fas fa-copy me-2"></i>TwinTitles
+            </div>
+            <div class="register-subtitle">Create your account</div>
+        </div>
+        
+        <div class="register-body">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <form method="POST" action="{{ url_for('register') }}">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="John" required>
+                            <label for="first_name">First Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Doe" required>
+                            <label for="last_name">Last Name</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                    <label for="email">Email address</label>
+                </div>
+                
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="johndoe123" required>
+                    <label for="username">Username</label>
+                </div>
+                
+                <div class="input-group mb-3">
+                    <div class="form-floating flex-grow-1">
+                        <input type="password" class="form-control border-end-0" id="password" name="password" placeholder="Password" required>
+                        <label for="password">Password</label>
+                    </div>
+                    <span class="input-group-text bg-white border-start-0" id="togglePassword">
+                        <i class="fas fa-eye-slash"></i>
+                    </span>
+                </div>
+                
+                <div class="password-strength">
+                    <div class="d-flex justify-content-between">
+                        <span>Password Strength:</span>
+                        <span id="strengthText">Too Weak</span>
+                    </div>
+                    <div class="progress">
+                        <div id="strengthBar" class="progress-bar bg-danger" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="input-group mb-3 mt-3">
+                    <div class="form-floating flex-grow-1">
+                        <input type="password" class="form-control border-end-0" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+                        <label for="confirm_password">Confirm Password</label>
+                    </div>
+                    <span class="input-group-text bg-white border-start-0" id="toggleConfirmPassword">
+                        <i class="fas fa-eye-slash"></i>
+                    </span>
+                </div>
+                
+                <div class="terms-checkbox">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                        <label class="form-check-label" for="terms">
+                            I agree to the <a href="#" class="login-link">Terms of Service</a> and <a href="#" class="login-link">Privacy Policy</a>
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-register">Create Account</button>
+            </form>
+        </div>
+        
+        <div class="register-footer">
+            <p>Already have an account? <a href="{{ url_for('login') }}" class="login-link">Sign in</a></p>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        });
+        
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('confirm_password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        });
+        
+        // Password strength meter
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            
+            // Calculate password strength
+            let strength = 0;
+            
+            if (password.length > 6) strength += 20;
+            if (password.length > 10) strength += 20;
+            if (/[A-Z]/.test(password)) strength += 20;
+            if (/[0-9]/.test(password)) strength += 20;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 20;
+            
+            // Update strength bar and text
+            strengthBar.style.width = strength + '%';
+            
+            if (strength < 40) {
+                strengthBar.className = 'progress-bar bg-danger';
+                strengthText.textContent = 'Too Weak';
+            } else if (strength < 60) {
+                strengthBar.className = 'progress-bar bg-warning';
+                strengthText.textContent = 'Weak';
+            } else if (strength < 80) {
+                strengthBar.className = 'progress-bar bg-info';
+                strengthText.textContent = 'Medium';
+            } else {
+                strengthBar.className = 'progress-bar bg-success';
+                strengthText.textContent = 'Strong';
+            }
+        });
+    </script>
+</body>
+</html> 
